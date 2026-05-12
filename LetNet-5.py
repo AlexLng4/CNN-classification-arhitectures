@@ -58,7 +58,7 @@ class LeNetLoss(nn.Module):
     def forward(self, distances, labels):
 
         number_of_batches = distances.shape[0]
-        rows = torch.arange(number_of_batches)
+        rows = torch.arange(number_of_batches, device=distances.device)
 
         # specify the rows in order to map correctly
         correct_distances = distances[rows, labels]
@@ -69,11 +69,9 @@ class LeNetLoss(nn.Module):
         # [0,1]. meaning big distance will go to 0. vice versa small distance for missmatch index go to high and penalize
         # the score.
 
-        j = torch.tensor(0.1, device=distances.device)
-
-        # Formula corectată:
-        # torch.exp(-j) acum funcționează pentru că -j este un Tensor
-        penalty = torch.log(torch.exp(-j) + torch.sum(torch.exp(-distances), dim=1))
+        # "Penalized log-likelihood" (LeCun et al., 1998):
+        # L = d_correct + log(sum_j exp(-d_j))
+        penalty = torch.logsumexp(-distances, dim=1)
 
         loss = correct_distances + penalty
 
