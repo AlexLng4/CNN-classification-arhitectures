@@ -188,7 +188,7 @@ if __name__ == "__main__":
                 correct += (predictions == batch_y).sum().item()
 
         accuracy = correct / len(test_dataset) * 100
-        print(f"✅ Epoch {epoch+1}/{Epochs} — Avg Loss: {avg_loss:.4f} — Test Accuracy: {accuracy:.2f}% ({correct}/{len(test_dataset)})")
+        print(f"Epoch {epoch+1}/{Epochs} — Avg Loss: {avg_loss:.4f} — Test Accuracy: {accuracy:.2f}% ({correct}/{len(test_dataset)})")
         print()
 
-    print("🏁 Training complete!")
+    print("Training complete!")
