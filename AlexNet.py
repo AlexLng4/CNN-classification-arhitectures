@@ -63,6 +63,8 @@ class AlexNet(nn.Module):
 
         # initialize LRN variable
         self.lrn = AlexNetLRN()
+        # dropout
+        self.dropout = nn.Dropout(p=0.5)
 
     def forward(self, x):
 
@@ -82,9 +84,14 @@ class AlexNet(nn.Module):
         x = self.pooling5(x)
 
         x = self.flatten(x)
+
         x = torch.relu(self.fc1(x))
+        x = self.dropout(x)
+
         x = torch.relu(self.fc2(x))
-        x = torch.relu(self.fc3(x))
+        x = self.dropout(x)
+
+        x = self.fc3(x)
         return x
 
 if __name__=="__main__":
